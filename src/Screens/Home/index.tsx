@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import axios from 'axios';
 
 import logoImg from "../../assets/logo-nlw-esports.png"
+import { Background } from '../../components/Background';
 import { GameCard, GameCardProps } from '../../components/GameCard';
 import { Heading } from '../../components/Heading';
 
@@ -24,30 +25,32 @@ export function Home() {
     }, [])
   
     return (
-    <SafeAreaView style={styles.container}>
-        <Image 
-            source={logoImg}
-            style={styles.logo}
-        />
+        <Background>
+            <SafeAreaView style={styles.container}>
+                <Image 
+                    source={logoImg}
+                    style={styles.logo}
+                    />
 
-        <Heading
-            title="Find your duo!"
-            subtitle="Choose the game that you wanna play..."
-        />
+                <Heading
+                    title="Find your duo!"
+                    subtitle="Choose the game that you wanna play..."
+                    />
 
-        <FlatList 
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            data={games}
-            keyExtractor={item => item.id}
-            renderItem={({ item }) => (
-                <GameCard
-                    data={item}
-                />
-            )}
-            contentContainerStyle={styles.contentList}
-        />
+                <FlatList 
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    data={games}
+                    keyExtractor={item => item.id}
+                    renderItem={({ item }) => (
+                        <GameCard
+                        data={item}
+                        />
+                        )}
+                        contentContainerStyle={styles.contentList}
+                        />
 
-    </SafeAreaView>
+            </SafeAreaView>
+        </Background>
   );
 }
