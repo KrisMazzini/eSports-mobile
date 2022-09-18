@@ -23,7 +23,7 @@ export function Home() {
 
     useEffect(() => {
         async function handleGames() {
-            const gamesResponse = await axios.get('http://192.168.1.9:8080/games')
+            const gamesResponse = await axios.get('http://192.168.100.157:8080/games')
             const data = gamesResponse.data as GameCardProps[]
             setGames(data)
         }

@@ -8,6 +8,7 @@ import axios from 'axios';
 import { Background } from '../../components/Background';
 import { Heading } from '../../components/Heading';
 import { DuoCard, DuoCardProps } from '../../components/DuoCard';
+import { DuoMatch } from '../../components/DuoMatch';
 
 import logoImg from '../../assets/logo-nlw-esports.png'
 
@@ -22,15 +23,22 @@ export function Game() {
   const game = route.params as GameParams
 
   const [duos, setDuos] = useState<DuoCardProps[]>([])
+  const [selectedDuoDiscord, setSelectedDuoDiscord] = useState<string>('')
 
   function handleGoBack() {
     navigation.goBack()
   }
 
+  async function getUserDiscord(adId:string) {
+    const response = await axios.get(`http://192.168.100.157:8080/ads/${adId}/discord`)
+    const data = response.data as {discord: string}
+    setSelectedDuoDiscord(data.discord)
+  }
+
   useEffect(() => {
     async function handleAds() {
-      const gamesResponse = await axios.get(`http://192.168.1.9:8080/games/${game.id}/ads`)
-      const data = gamesResponse.data as DuoCardProps[]
+      const response = await axios.get(`http://192.168.100.157:8080/games/${game.id}/ads`)
+      const data = response.data as DuoCardProps[]
       setDuos(data)
     }
 
@@ -70,7 +78,7 @@ export function Game() {
           data={duos}
           keyExtractor={item => item.id}
           renderItem={({item}) => (
-            <DuoCard data={item} onConnect={() => { }}/>
+            <DuoCard data={item} onConnect={() => getUserDiscord(item.id)}/>
           )}
           horizontal
           style={styles.containerList}
@@ -81,6 +89,12 @@ export function Game() {
               There are no ads published yet.
             </Text>
           )}
+        />
+
+        <DuoMatch
+          visible={!!selectedDuoDiscord.length}
+          discord={selectedDuoDiscord}
+          onClose={() => setSelectedDuoDiscord('')}
         />
       </SafeAreaView>
     </Background>
